@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BersihKilat Laundry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky:     #C8E8F7;
+      --ocean:   #1A6FA3;
+      --foam:    #EDF7FD;
+      --ink:     #0D1B2A;
+      --mist:    #6B8EA6;
+      --soap:    #FFFFFF;
+      --bubble:  #E0F3FB;
+      --accent:  #F9C846;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--foam);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 5%;
+      background: rgba(237,247,253,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,232,247,0.6);
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.35rem;
+      color: var(--ocean);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2.2rem; }
+    nav ul a {
+      text-decoration: none; color: var(--mist);
+      font-size: .9rem; font-weight: 500;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: var(--ocean); }
+    .nav-cta {
+      background: var(--ocean); color: #fff !important;
+      padding: .5rem 1.2rem; border-radius: 2rem;
+      transition: background .2s, transform .2s !important;
+    }
+    .nav-cta:hover { background: var(--ink) !important; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 2rem;
+      padding: 8rem 5% 4rem;
+      background: linear-gradient(135deg, var(--foam) 60%, var(--sky) 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; right: -80px; top: -80px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,232,247,.7) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--bubble); color: var(--ocean);
+      font-size: .78rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; padding: .35rem .9rem; border-radius: 2rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(26,111,163,.15);
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800; line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 em {
+      font-style: normal; color: var(--ocean);
+    }
+    .hero p {
+      font-size: 1.05rem; color: var(--mist);
+      line-height: 1.7; max-width: 440px;
+      margin-bottom: 2rem;
+    }
+    .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--ocean); color: #fff;
+      padding: .85rem 2rem; border-radius: 2rem;
+      font-weight: 600; font-size: .95rem; text-decoration: none;
+      box-shadow: 0 8px 24px rgba(26,111,163,.3);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(26,111,163,.4); }
+    .btn-ghost {
+      color: var(--ocean); border: 1.5px solid var(--ocean);
+      padding: .85rem 2rem; border-radius: 2rem;
+      font-weight: 600; font-size: .95rem; text-decoration: none;
+      transition: background .2s, color .2s;
+    }
+    .btn-ghost:hover { background: var(--ocean); color: #fff; }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .machine-wrap {
+      position: relative; width: 320px; height: 320px;
+    }
+    .machine {
+      width: 280px; height: 280px;
+      background: linear-gradient(145deg, #fff 0%, var(--sky) 100%);
+      border-radius: 2.5rem;
+      box-shadow: 0 20px 60px rgba(26,111,163,.18), 0 4px 12px rgba(26,111,163,.1);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      margin: auto;
+    }
+    .machine::before {
+      content: '';
+      position: absolute; top: 12px; left: 12px; right: 12px; height: 3px;
+      background: linear-gradient(90deg, var(--ocean), var(--accent));
+      border-radius: 2px;
+    }
+    .drum {
+      width: 160px; height: 160px; border-radius: 50%;
+      border: 6px solid var(--ocean);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .drum-inner {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--sky) 0%, var(--ocean) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.6rem;
+    }
+    .drum::after {
+      content: '';
+      position: absolute; width: 6px; height: 6px;
+      background: var(--ocean); border-radius: 50%;
+      top: 8px; left: 50%; transform: translateX(-50%);
+    }
+    .machine-label {
+      margin-top: 1rem; font-size: .75rem; font-weight: 600;
+      color: var(--mist); letter-spacing: .1em; text-transform: uppercase;
+    }
+    .badge {
+      position: absolute;
+      background: var(--accent); color: var(--ink);
+      font-size: .78rem; font-weight: 700;
+      padding: .45rem .9rem; border-radius: 2rem;
+      box-shadow: 0 4px 12px rgba(249,200,70,.4);
+    }
+    .badge-1 { top: 20px; right: 0; }
+    .badge-2 { bottom: 30px; left: 0; }
+
+    /* ── STATS STRIP ── */
+    .stats {
+      background: var(--ocean);
+      display: flex; justify-content: space-around;
+      padding: 2.2rem 5%; gap: 1rem; flex-wrap: wrap;
+    }
+    .stat { text-align: center; color: #fff; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem; font-weight: 800;
+      line-height: 1;
+    }
+    .stat-num span { color: var(--accent); }
+    .stat-label { font-size: .82rem; opacity: .7; margin-top: .3rem; }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 5rem 5%; }
+    .section-eye {
+      font-size: .75rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--ocean);
+      margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700; line-height: 1.2;
+      color: var(--ink); margin-bottom: 1rem;
+    }
+    .section-sub {
+      color: var(--mist); font-size: 1rem; max-width: 480px; line-height: 1.7;
+    }
+
+    /* ── SERVICES ── */
+    #layanan { background: var(--foam); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .service-card {
+      background: #fff; border-radius: 1.5rem;
+      padding: 2rem;
+      border: 1px solid rgba(200,232,247,.8);
+      transition: transform .2s, box-shadow .2s;
+      cursor: default;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(26,111,163,.12); }
+    .service-icon {
+      font-size: 2.4rem; margin-bottom: 1.1rem;
+      display: inline-block;
+    }
+    .service-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 700; margin-bottom: .6rem;
+    }
+    .service-card p { font-size: .9rem; color: var(--mist); line-height: 1.6; }
+    .service-price {
+      margin-top: 1.2rem;
+      font-weight: 700; color: var(--ocean);
+      font-size: 1rem;
+    }
+
+    /* ── HOW ── */
+    #cara-kerja { background: var(--sky); }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem; margin-top: 3rem; position: relative;
+    }
+    .step {
+      background: #fff; border-radius: 1.5rem;
+      padding: 2rem 1.5rem; text-align: center;
+      border: 1px solid rgba(26,111,163,.1);
+    }
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 3rem; font-weight: 800;
+      color: var(--sky); line-height: 1;
+      margin-bottom: .6rem;
+    }
+    .step-icon { font-size: 2rem; margin-bottom: .8rem; }
+    .step h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700; margin-bottom: .5rem;
+    }
+    .step p { font-size: .88rem; color: var(--mist); line-height: 1.6; }
+
+    /* ── HARGA ── */
+    #harga { background: var(--foam); }
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 3rem; align-items: start;
+    }
+    .price-card {
+      background: #fff; border-radius: 1.8rem;
+      padding: 2.2rem; border: 1.5px solid rgba(200,232,247,.9);
+      transition: transform .2s;
+    }
+    .price-card.featured {
+      background: var(--ocean); color: #fff;
+      border-color: var(--ocean);
+      transform: scale(1.03);
+      box-shadow: 0 16px 48px rgba(26,111,163,.3);
+    }
+    .price-card:not(.featured):hover { transform: translateY(-4px); }
+    .plan-name {
+      font-family: 'Syne', sans-serif;
+      font-size: .85rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--ocean);
+      margin-bottom: .8rem;
+    }
+    .price-card.featured .plan-name { color: var(--accent); }
+    .plan-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem; font-weight: 800; line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .plan-price sub { font-size: 1rem; font-weight: 400; opacity: .7; }
+    .plan-desc { font-size: .85rem; opacity: .6; margin-bottom: 1.4rem; }
+    .plan-features { list-style: none; margin-bottom: 1.6rem; }
+    .plan-features li {
+      font-size: .9rem; padding: .45rem 0;
+      border-bottom: 1px solid rgba(200,232,247,.3);
+      display: flex; gap: .6rem; align-items: center;
+    }
+    .price-card.featured .plan-features li { border-bottom-color: rgba(255,255,255,.15); }
+    .plan-features li::before { content: '✓'; font-weight: 700; color: var(--accent); }
+    .btn-plan {
+      display: block; text-align: center;
+      padding: .8rem; border-radius: 2rem;
+      font-weight: 600; font-size: .92rem;
+      text-decoration: none; transition: all .2s;
+    }
+    .price-card:not(.featured) .btn-plan {
+      background: var(--bubble); color: var(--ocean);
+      border: 1.5px solid var(--ocean);
+    }
+    .price-card:not(.featured) .btn-plan:hover { background: var(--ocean); color: #fff; }
+    .price-card.featured .btn-plan { background: var(--accent); color: var(--ink); }
+    .price-card.featured .btn-plan:hover { background: #fff; }
+
+    /* ── TESTIMONIAL ── */
+    #testimoni { background: var(--sky); }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .testi-card {
+      background: #fff; border-radius: 1.5rem;
+      padding: 1.8rem; border: 1px solid rgba(200,232,247,.8);
+    }
+    .stars { color: var(--accent); font-size: 1rem; margin-bottom: .8rem; }
+    .testi-text { font-size: .92rem; color: var(--ink); line-height: 1.7; margin-bottom: 1.2rem; }
+    .testi-author { display: flex; align-items: center; gap: .8rem; }
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--ocean), var(--sky));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .author-name { font-weight: 600; font-size: .9rem; }
+    .author-loc { font-size: .78rem; color: var(--mist); }
+
+    /* ── KONTAK ── */
+    #kontak {
+      background: var(--ocean);
+      color: #fff; text-align: center;
+    }
+    #kontak .section-eye { color: var(--accent); }
+    #kontak .section-title { color: #fff; margin: 0 auto 1rem; }
+    #kontak .section-sub { color: rgba(255,255,255,.7); margin: 0 auto 2.5rem; }
+    .contact-form {
+      max-width: 540px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%; padding: .9rem 1.2rem;
+      border-radius: 1rem; border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.1); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: .95rem;
+      outline: none; transition: border .2s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: rgba(255,255,255,.5); }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--accent); }
+    .contact-form textarea { resize: vertical; min-height: 110px; }
+    .btn-submit {
+      background: var(--accent); color: var(--ink);
+      padding: .9rem; border-radius: 2rem;
+      font-weight: 700; font-size: 1rem; border: none;
+      cursor: pointer; transition: transform .2s, box-shadow .2s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,200,70,.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,.5);
+      text-align: center; padding: 2rem 5%;
+      font-size: .85rem;
+    }
+    footer strong { color: #fff; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: .6rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,.4); text-decoration: none; }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── WA FLOAT ── */
+    .wa-float {
+      position: fixed; bottom: 1.8rem; right: 1.8rem; z-index: 200;
+      background: #25D366; color: #fff;
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; text-decoration: none;
+      box-shadow: 0 6px 20px rgba(37,211,102,.45);
+      transition: transform .2s;
+    }
+    .wa-float:hover { transform: scale(1.1); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding-top: 6rem; }
+      .hero p { margin: 0 auto 2rem; }
+      .btn-row { justify-content: center; }
+      .hero-visual { margin-top: 2rem; }
+      nav ul { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .drum { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Bersih<span>Kilat</span></div>
+  <ul>
+    <li><a href="#layanan">Layanan</a></li>
+    <li><a href="#cara-kerja">Cara Kerja</a></li>
+    <li><a href="#harga">Harga</a></li>
+    <li><a href="#testimoni">Testimoni</a></li>
+    <li><a href="#kontak" class="nav-cta">Pesan Sekarang</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-tag">✦ Laundry Kiloan & Satuan</div>
+    <h1>Pakaianmu <em>Bersih</em>,<br>Harimu Lebih<br>Ringan</h1>
+    <p>BersihKilat hadir dengan layanan cuci-lipat cepat, wangi tahan lama, dan antar-jemput gratis di area kota. Titip baju pagi, terima sore.</p>
+    <div class="btn-row">
+      <a href="#harga" class="btn-primary">Lihat Paket Harga</a>
+      <a href="#cara-kerja" class="btn-ghost">Cara Pesan</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="machine-wrap">
+      <div class="machine">
+        <div class="drum">
+          <div class="drum-inner">👕</div>
+        </div>
+        <div class="machine-label">BersihKilat Pro</div>
+      </div>
+      <div class="badge badge-1">⚡ Ekspres 3 Jam</div>
+      <div class="badge badge-2">🚚 Antar Gratis</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">12<span>K+</span></div>
+    <div class="stat-label">Pelanggan Puas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">98<span>%</span></div>
+    <div class="stat-label">Rating Bintang 5</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">3<span>Jam</span></div>
+    <div class="stat-label">Layanan Ekspres</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">5<span>+</span></div>
+    <div class="stat-label">Tahun Pengalaman</div>
+  </div>
+</div>
+
+<!-- LAYANAN -->
+<section id="layanan">
+  <div class="section-eye">Layanan Kami</div>
+  <h2 class="section-title">Semua Kebutuhan<br>Cucianmu, Kami Handle</h2>
+  <p class="section-sub">Dari cuci kiloan biasa sampai pakaian premium—kami rawat setiap helai dengan teliti.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">👕</div>
+      <h3>Cuci Kiloan</h3>
+      <p>Pakaian sehari-hari dicuci bersih, dikeringkan, dan dilipat rapi. Cocok untuk keluarga dan kos-kosan.</p>
+      <div class="service-price">Mulai Rp 7.000/kg</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">👔</div>
+      <h3>Setrika Saja</h3>
+      <p>Pakaian sudah dicuci? Titip setrika saja, kami rapikan dengan sempurna tanpa kusut.</p>
+      <div class="service-price">Mulai Rp 3.500/kg</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧥</div>
+      <h3>Dry Cleaning</h3>
+      <p>Jas, gaun pengantin, jaket kulit—kami tangani dengan pelarut khusus tanpa merusak serat.</p>
+      <div class="service-price">Mulai Rp 35.000/pcs</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛏️</div>
+      <h3>Cuci Sprei & Bed Cover</h3>
+      <p>Sprei, selimut, dan bed cover dicuci bersih dan wangi. Muat hingga ukuran King Size.</p>
+      <div class="service-price">Mulai Rp 25.000/set</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">👟</div>
+      <h3>Cuci Sepatu</h3>
+      <p>Sneakers, sepatu kulit, hingga sepatu anak—dibersihkan detail, termasuk bagian sol dalam.</p>
+      <div class="service-price">Mulai Rp 20.000/pasang</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Ekspres 3 Jam</h3>
+      <p>Butuh baju mendesak? Layanan kilat selesai dalam 3 jam, siap pakai langsung saat diambil.</p>
+      <div class="service-price">+50% dari harga normal</div>
+    </div>
+  </div>
+</section>
+
+<!-- CARA KERJA -->
+<section id="cara-kerja">
+  <div class="section-eye">Cara Pesan</div>
+  <h2 class="section-title">Cuma 4 Langkah,<br>Baju Sudah Beres</h2>
+  <p class="section-sub">Proses yang mudah dan transparan—kamu selalu tahu cucianmu sedang di tahap mana.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">📲</div>
+      <h3>Pesan via WhatsApp</h3>
+      <p>Hubungi kami atau klik tombol WA. Pilih layanan, jadwal, dan titik jemput.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">🚚</div>
+      <h3>Kami Jemput</h3>
+      <p>Kurir kami datang ke lokasi kamu, menimbang, dan memberikan nota resmi.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">🫧</div>
+      <h3>Cuci & Setrika</h3>
+      <p>Pakaianmu diproses dengan mesin modern dan deterjen premium bebas bahan keras.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon">📦</div>
+      <h3>Antar ke Rumah</h3>
+      <p>Selesai? Kami antarkan rapi terbungkus plastik langsung ke depan pintumu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HARGA -->
+<section id="harga">
+  <div class="section-eye">Paket Harga</div>
+  <h2 class="section-title">Transparan,<br>Tanpa Biaya Tersembunyi</h2>
+  <p class="section-sub">Pilih paket yang sesuai kebutuhanmu. Semua sudah termasuk antar-jemput.</p>
+
+  <div class="price-grid">
+    <div class="price-card">
+      <div class="plan-name">Paket Harian</div>
+      <div class="plan-price">Rp 7.000 <sub>/kg</sub></div>
+      <div class="plan-desc">Ideal untuk pakaian sehari-hari</div>
+      <ul class="plan-features">
+        <li>Cuci + Keringkan</li>
+        <li>Lipat Rapi</li>
+        <li>Min. 3 kg</li>
+        <li>Selesai 1–2 Hari</li>
+        <li>Antar-Jemput Gratis</li>
+      </ul>
+      <a href="#kontak" class="btn-plan">Pilih Paket</a>
+    </div>
+
+    <div class="price-card featured">
+      <div class="plan-name">⭐ Paket Favorit</div>
+      <div class="plan-price">Rp 12.000 <sub>/kg</sub></div>
+      <div class="plan-desc">Cuci + setrika, paling diminati</div>
+      <ul class="plan-features">
+        <li>Cuci + Keringkan</li>
+        <li>Setrika Rapi</li>
+        <li>Min. 3 kg</li>
+        <li>Selesai Hari Ini</li>
+        <li>Antar-Jemput Gratis</li>
+      </ul>
+      <a href="#kontak" class="btn-plan">Pilih Paket</a>
+    </div>
+
+    <div class="price-card">
+      <div class="plan-name">Paket Ekspres</div>
+      <div class="plan-price">Rp 18.000 <sub>/kg</sub></div>
+      <div class="plan-desc">Selesai dalam 3 jam, siap pakai</div>
+      <ul class="plan-features">
+        <li>Cuci + Keringkan</li>
+        <li>Setrika Rapi</li>
+        <li>Min. 2 kg</li>
+        <li>Selesai 3 Jam ⚡</li>
+        <li>Antar-Jemput Gratis</li>
+      </ul>
+      <a href="#kontak" class="btn-plan">Pilih Paket</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section id="testimoni">
+  <div class="section-eye">Testimoni</div>
+  <h2 class="section-title">Kata Pelanggan Kami</h2>
+  <p class="section-sub">Ribuan pelanggan sudah percaya BersihKilat sejak 2019.</p>
+
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Pakai BersihKilat tiap minggu, baju kerjaku selalu rapi dan wangi. Paling suka paket favoritnya—tepat waktu dan bersih banget!"</p>
+      <div class="testi-author">
+        <div class="avatar">🧑</div>
+        <div>
+          <div class="author-name">Rizky A.</div>
+          <div class="author-loc">Pelanggan Setia · Banjarmasin</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Nyuci sprei king size di sini dan hasilnya luar biasa. Kurir ramah, harga masuk akal, bau wanginya tahan lama. Highly recommended!"</p>
+      <div class="testi-author">
+        <div class="avatar">👩</div>
+        <div>
+          <div class="author-name">Sari W.</div>
+          <div class="author-loc">Pelanggan Baru · Banjarbaru</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Ekspres 3 jam beneran beres! Pas mau kondangan mendadak, baju jas saya selesai tepat waktu. Keren banget pelayanannya."</p>
+      <div class="testi-author">
+        <div class="avatar">🧔</div>
+        <div>
+          <div class="author-name">Deni M.</div>
+          <div class="author-loc">Pelanggan Setia · Banjarmasin</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section id="kontak">
+  <div class="section-eye">Hubungi Kami</div>
+  <h2 class="section-title">Siap Terima Cucianmu<br>Hari Ini</h2>
+  <p class="section-sub">Isi form di bawah atau langsung WhatsApp kami. Kami balas dalam hitungan menit!</p>
+
+  <form class="contact-form" onsubmit="handleSubmit(event)">
+    <input type="text" placeholder="Nama Kamu" required />
+    <input type="tel" placeholder="Nomor WhatsApp" required />
+    <input type="text" placeholder="Alamat Penjemputan" required />
+    <textarea placeholder="Layanan yang diinginkan (mis. Paket Favorit 5 kg + 1 sprei)"></textarea>
+    <button type="submit" class="btn-submit">📲 Pesan Sekarang via WhatsApp</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>BersihKilat Laundry</strong> — Jl. Lambung Mangkurat No. 12, Banjarmasin<br>
+  <div class="footer-links">
+    <a href="#">Beranda</a>
+    <a href="#layanan">Layanan</a>
+    <a href="#harga">Harga</a>
+    <a href="#kontak">Kontak</a>
+  </div>
+  <p style="margin-top:.8rem">© 2025 BersihKilat. Semua hak dilindungi.</p>
+</footer>
+
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/6281234567890" target="_blank" title="Chat WhatsApp">💬</a>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const nama = form[0].value;
+    const wa   = form[1].value;
+    const alamat = form[2].value;
+    const layanan = form[3].value || 'belum disebutkan';
+    const msg = encodeURIComponent(
+      `Halo BersihKilat! 👋\nNama: ${nama}\nNo. WA: ${wa}\nAlamat: ${alamat}\nLayanan: ${layanan}`
+    );
+    window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+  }
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.service-card, .step, .price-card, .testi-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

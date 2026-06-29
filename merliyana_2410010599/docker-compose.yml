@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  php-app:
+    # Build dari Dockerfile yang ada di direktori ini
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Nama container
+    container_name: tugas2-cloud-php
+
+    # Port mapping: host:container
+    ports:
+      - "8080:80"
+
+    # Mount volume agar perubahan file langsung terlihat
+    volumes:
+      - ./src:/var/www/html
+
+    # Restart otomatis jika container mati
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      - PHP_DISPLAY_ERRORS=1
+      - PHP_ERROR_REPORTING=E_ALL
